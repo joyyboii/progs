@@ -1,0 +1,53 @@
+#include<stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* create_node(int data) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
+}
+
+bool check_bst(struct Node* root, int min_val, int max_val) {
+    if (root == NULL) {
+        return true;
+    }
+
+    if (root->data < min_val || root->data > max_val) {
+        return false;
+    }
+
+    return check_bst(root->left, min_val, root->data - 1) &&
+           check_bst(root->right, root->data + 1, max_val);
+}
+
+bool is_binary_search_tree(struct Node* root) {
+    return check_bst(root, 0, 10000);
+}
+
+int main() {
+    // Create a sample binary tree
+    struct Node* root = create_node(5);
+    root->left = create_node(3);
+    root->right = create_node(7);
+    root->left->left = create_node(2);
+    root->left->right = create_node(4);
+    root->right->left = create_node(6);
+    root->right->right = create_node(8);
+
+    if (is_binary_search_tree(root)) {
+        printf("Yes");
+    } else {
+        printf("No");
+    }
+
+    return 0;
+}
